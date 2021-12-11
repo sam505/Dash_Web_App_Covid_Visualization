@@ -39,50 +39,26 @@ app.layout = html.Div(
                    value=1,
                    marks=markers),
         html.Hr(),
+        html.Br(),
         html.Div([
-            dbc.Row([
-                dbc.Col(dcc.Graph(id='graph-two')),
-                dbc.Col(dcc.Graph(id='graph-three'))
-            ])
-        ]),
-        html.Br(),
-        html.Div(dcc.Dropdown(
-            id='choosing_state',
-            options=[{'label': i, 'value': i} for i in indicators_state],
-            value=indicators_state[0],
-            style={"width": "40%"},
-            clearable=True,
-            optionHeight=20,
-            searchable=True), className="three columns"),
-        html.Br(),
-        html.Div(
-            dcc.Dropdown(
-                id='choosing_county',
-                options=[{'label': i, 'value': i} for i in indicators_county],
-                value=indicators_county[0],
-                style={"width": "50%"},
-                clearable=True,
-                optionHeight=20,
-                searchable=True, className="three columns"
-            )
-        ),
-        dbc.Row(
-            [
-                dbc.Col(
-                    html.Div("The last of three columns"),
-                    width={"size": 3, "order": "last", "offset": 1},
-                ),
-                dbc.Col(
-                    html.Div("The first of three columns"),
-                    width={"size": 3, "order": 1, "offset": 2},
-                ),
-                dbc.Col(
-                    html.Div("The second of three columns"),
-                    width={"size": 3, "order": 5},
-                ),
-            ]
-        ),
-    ], className="nine columns"
+            html.Div([
+                dcc.Dropdown(
+                    id='choosing_state',
+                    options=[{'label': i, 'value': i} for i in indicators_state],
+                    value=indicators_state[0],
+                    style={"width": "50%"}
+                )
+            ], className="six columns"),
+            html.Div([
+                dcc.Dropdown(
+                    id='choosing_county',
+                    options=[{'label': i, 'value': i} for i in indicators_county],
+                    value=indicators_county[0],
+                    style={"width": "50%"}
+                )
+            ], className="six columns")]
+        )
+    ]
 )
 
 
