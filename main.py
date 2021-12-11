@@ -2,6 +2,7 @@ import dash
 from dash import dcc
 from dash import html
 import plotly.express as px
+from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -33,14 +34,14 @@ app.layout = html.Div([
         dcc.Dropdown(
             id='choosing_county',
             option=[{'label': i, 'value': i} for i in indicators_county],
-            value='try')
-        @ app.callback(
-            Output(component_id='graph_one', component_property='figure'),
-            Input(component_id='date-slider', component_property='value'),
-            Input(component_id='Vaccination-Radio', component_property='value')
-        )])])
+            value='try')])])
 
 
+@app.callback(
+    Output(component_id='graph_one', component_property='figure'),
+    Input(component_id='date-slider', component_property='value'),
+    Input(component_id='Vaccination-Radio', component_property='value')
+)
 def function_one(date, status):
     if status == 'Series_Complete_Pop_Pct':
         fig = px.choropleth(jur, geojson=counties, locations='Location', locationmode='USA-states',
