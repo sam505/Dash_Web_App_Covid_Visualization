@@ -21,7 +21,7 @@ app.layout = html.Div([
         value='Series_Complete_Pop_Pct'),
     dcc.Graph(id='graph-one'),
     dcc.Slider(
-        id='date-slider',
+        id='input_1-slider',
         min=0,
         max=len(jur['Date'].unique()),
         value=0),
@@ -39,7 +39,7 @@ app.layout = html.Div([
 
 @app.callback(
     Output(component_id='graph_one', component_property='figure'),
-    Input(component_id='date-slider', component_property='value'),
+    Input(component_id='input_1-slider', component_property='value'),
     Input(component_id='Vaccination-Radio', component_property='value')
 )
 def function_one(date, status):
