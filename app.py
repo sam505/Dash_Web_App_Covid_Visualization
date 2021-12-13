@@ -144,7 +144,8 @@ def choropleth_2(input_3, input_5, input_6):
         locations="FIPS",
         geojson=counties,
         color=input_5,
-        scope="usa"
+        scope="usa",
+        hover_name="Recip_County"
                         )
     fig.update_geos(fitbounds="locations", visible=False)
     return fig.update_layout(margin={'r': 0, 't': 0, 'l': 0, 'b': 0})
