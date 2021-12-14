@@ -20,7 +20,7 @@ dates.reverse()
 markers = {}
 length = len(dates)
 points = 10
-for m in range(10):
+for m in range(points):
     markers[int(length / points * m)] = dates[int(length / points * m)]
 
 counties = json.load(open('geojson-counties-fips.json'))
@@ -71,7 +71,7 @@ app.layout = html.Div(
                     id='input-4',
                     options=[],
                     style={"width": "50%"},
-                    value=""
+                    value="Madera County"
                 ),
                 html.Br(),
                 dcc.RangeSlider(
@@ -79,7 +79,7 @@ app.layout = html.Div(
                     min=0,
                     max=100,
                     step=0.5,
-                    value=[0, 5],
+                    value=[30, 50],
                     marks={},
                     allowCross=False
                 ),
@@ -94,7 +94,6 @@ app.layout = html.Div(
 
 @app.callback(
     Output(component_id='input-4', component_property='options'),
-    Output(component_id='input-7', component_property='marks'),
     Input(component_id='input-3', component_property='value'),
     Input(component_id='input-4', component_property='value')
 )
@@ -102,13 +101,8 @@ def get_counties(input_3, input_4):
     county_s = data_county[data_county.Recip_State == input_3]
     county_s = county_s.Recip_County.unique().tolist()
     county_list = [{'label': i, 'value': i} for i in county_s]
-    data_positivity = data_original[data_original.county_name == input_4]
-    positivity_dates = data_positivity.report_date.unique().tolist()
-    markers_orig = {}
-    length_orig = len(positivity_dates)
-    for n in range(10):
-        markers_orig[int(length_orig / points * n)] = dates[int(length_orig / points * n)]
-    return county_list, markers_orig
+
+    return county_list
 
 
 @app.callback(
@@ -153,6 +147,7 @@ def choropleth_2(input_3, input_5, input_6):
 
 @app.callback(
     Output(component_id='graph-3', component_property='figure'),
+    Output(component_id='input-7', component_property='marks'),
     Input(component_id='input-4', component_property='value'),
     Input(component_id='input-7', component_property='value')
 )
@@ -169,7 +164,12 @@ def positivity_1(input_4, input_7):
         "report_date",
         "percent_test_results_reported_positive_last_7_days"
     )
-    return fig
+    markers_orig = {}
+    positivity_dates = data_positivity.report_date.tolist()
+    length_positivity = len(positivity_dates)
+    for n in range(points):
+        markers_orig[int(100 / points * n)] = positivity_dates[int(length_positivity / points * n)]
+    return fig.update_layout(margin={'r': 0, 't': 0, 'l': 0, 'b': 0}), markers_orig
 
 
 @app.callback(
@@ -190,7 +190,7 @@ def positivity_2(input_4, input_7):
         "report_date",
         "cases_per_100K_7_day_count_change"
     )
-    return fig
+    return fig.update_layout(margin={'r': 0, 't': 0, 'l': 0, 'b': 0})
 
 
 if __name__ == "__main__":
