@@ -10,6 +10,7 @@ jur = pd.read_csv(r'COVID-19_Vaccinations_in_the_United_States_Jurisdiction.csv'
 print(jur.columns)
 jur.dropna(inplace=True)
 app = dash.Dash(__name__)
+server = app.server
 app.layout = html.Div([
     html.H1('US COVID-19 Data Tracker'),
     html.Hr(),
