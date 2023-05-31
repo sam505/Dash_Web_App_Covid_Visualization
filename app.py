@@ -1,3 +1,4 @@
+from http import server
 from dash import Dash
 from dash import dcc
 from dash import html
@@ -7,10 +8,10 @@ import plotly.figure_factory as ff
 import json
 from dash.dependencies import Input, Output
 
-data_jurisdiction = pd.read_csv(r"COVID-19_Vaccinations_in_the_United_States_Jurisdiction.csv")
-data_county = pd.read_csv(r"COVID-19_Vaccinations_in_the_United_States_County.csv")
+data_jurisdiction = pd.read_csv(r"COVID-19_Vaccinations_in_the_United_States_Jurisdiction.csv", low_memory=False)
+data_county = pd.read_csv(r"COVID-19_Vaccinations_in_the_United_States_County.csv", low_memory=False)
 data_county = data_county[data_county.Recip_State != "UNK"]
-data_original = pd.read_csv(r"United_States_COVID-19_County_Level_of_Community_Transmission_as_Originally_Posted.csv")
+data_original = pd.read_csv(r"United_States_COVID-19_County_Level_of_Community_Transmission_as_Originally_Posted.csv", low_memory=False)
 dates = data_county.Date.unique().tolist()
 orig_dates = list(data_original.report_date.unique())
 indicators_state = list(data_county.Recip_State.unique())
@@ -26,6 +27,7 @@ for m in range(points):
 counties = json.load(open('geojson-counties-fips.json'))
 
 app = Dash(__name__)
+server = app.server
 app.layout = html.Div(
     children=[
         html.H1(children="US COVID 19 DATA TRACKER", style={"text-align": "center"}),
@@ -194,4 +196,4 @@ def positivity_2(input_4, input_7):
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server()
