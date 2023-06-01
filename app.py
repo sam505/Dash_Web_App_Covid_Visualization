@@ -2,7 +2,7 @@ from http import server
 from dash import Dash
 from dash import dcc
 from dash import html
-from get_data import download
+from get_data import download, logger
 import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
@@ -11,11 +11,13 @@ import os
 from dash.dependencies import Input, Output
 
 if not os.path.isdir("data"):
+    logger.info("Downloading data from API...")
     data_jurisdiction = download("unsk-b7fc", "jurisdiction")
     data_county = download("8xkx-amqh", "county")
     data_county = data_county[data_county.Recip_State != "UNK"]
     data_original = download("8396-v7yb", "original")
 else:
+    logger.info("Fetching data from directory...")
     data_jurisdiction = pd.read_csv(r"data/jurisdiction.csv", low_memory=False)
     data_county = pd.read_csv(r"data/county.csv", low_memory=False)
     data_county = data_county[data_county.Recip_State != "UNK"]
@@ -205,4 +207,4 @@ def positivity_2(input_4, input_7):
 
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run_server(debug=False, host="0.0.0.0", port=8080)
