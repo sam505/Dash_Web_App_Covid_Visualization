@@ -2,16 +2,25 @@ from http import server
 from dash import Dash
 from dash import dcc
 from dash import html
+from get_data import download
 import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
 import json
+import os
 from dash.dependencies import Input, Output
 
-data_jurisdiction = pd.read_csv(r"COVID-19_Vaccinations_in_the_United_States_Jurisdiction.csv", low_memory=False)
-data_county = pd.read_csv(r"COVID-19_Vaccinations_in_the_United_States_County.csv", low_memory=False)
-data_county = data_county[data_county.Recip_State != "UNK"]
-data_original = pd.read_csv(r"United_States_COVID-19_County_Level_of_Community_Transmission_as_Originally_Posted.csv", low_memory=False)
+if not os.path.isdir("data"):
+    data_jurisdiction = download("unsk-b7fc", "jurisdiction")
+    data_county = download("8xkx-amqh", "county")
+    data_county = data_county[data_county.Recip_State != "UNK"]
+    data_original = download("8396-v7yb", "original")
+else:
+    data_jurisdiction = pd.read_csv(r"data/jurisdiction.csv", low_memory=False)
+    data_county = pd.read_csv(r"data/county.csv", low_memory=False)
+    data_county = data_county[data_county.Recip_State != "UNK"]
+    data_original = pd.read_csv(r"data/original.csv", low_memory=False)
+
 dates = data_county.Date.unique().tolist()
 orig_dates = list(data_original.report_date.unique())
 indicators_state = list(data_county.Recip_State.unique())
@@ -40,7 +49,7 @@ app.layout = html.Div(
                        ),
         dcc.Graph(id='graph-1'),
         dcc.Slider(id='input-2',
-                   min=0,
+                   min=5,
                    max=len(dates),
                    value=30,
                    marks=markers),
