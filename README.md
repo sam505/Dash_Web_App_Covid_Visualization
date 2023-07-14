@@ -1,5 +1,5 @@
 # US COVID 19 DATA TRACKER
 
-![Image](image1.png)
+![Image](assets/images/image1.png)
 
-![Image](image2.png)
+![Image](assets/images/image2.png)
